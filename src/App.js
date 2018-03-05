@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import lightwallet from 'eth-lightwallet'
 
@@ -69,6 +68,7 @@ class App extends Component {
                           });
       })
     })
+    console.log('finished constructing');
   }
 
   updateTxValue(property,newVal){
@@ -86,9 +86,14 @@ class App extends Component {
 
     if(this.state.initialRunTime != null){
       var startTime = new Date();
-      this.rawTx = lightwallet.txutils.valueTx(this.txObject);
-      this.signed = lightwallet.signing.signTx(this.ks,this.state.pwDerivedKey,this.rawTx,this.state.address);
-      this.signTime = (new Date()) - startTime;
+      if(true){
+        for (var i = 0; i < 500; i++) {
+          this.rawTx = lightwallet.txutils.valueTx(this.txObject);
+          this.signed = lightwallet.signing.signTx(this.ks,this.state.pwDerivedKey,this.rawTx,this.state.address);
+        }
+        this.signTime = (new Date()) - startTime;        
+      }
+
       return (
         <div>
             <div>
@@ -104,7 +109,7 @@ class App extends Component {
               </div>
             </div>
               <br/>
-              {"Sign time: " + this.signTime+"ms"}
+              {"Sign time 500 runs: " + this.signTime+"ms"}
         </div>
       )      
     } else {
@@ -119,7 +124,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        
+        <button onClick = {() => this.setState({address:this.state.address})} />
         <div>
             {"Address:"+ this.state.address}<br/>
             <button onClick = {() => this.setState({initialRunTime:this.state.initialRunTime})}> Test Performance </button>
@@ -132,7 +137,9 @@ class App extends Component {
             {this.renderTest()}
         </div>
       </div>
+
     );
+
   }
 }
 
