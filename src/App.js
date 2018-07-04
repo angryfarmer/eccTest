@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import lightwallet from 'eth-lightwallet'
+import lightwallet from 'eth-lightwallet' //Library for ECC signing and other Ethereum Functionality. Check https://github.com/ConsenSys/eth-lightwallet
 
 class Txfield extends Component{
   constructor(props){
@@ -35,7 +35,7 @@ class App extends Component {
                     initialRunTime: null,
                   };
     
-    this.txObject = { // value will change integers into appropriate form
+    this.txObject = { // Test transaction data. Can replace with 
       to: '0xc7e29a573d4c6b8800682b6618a0f04177accb78',
       gasLimit: 5000000000,
       gasPrice: 500000,
@@ -44,7 +44,8 @@ class App extends Component {
     }
     var startTime = new Date() //track start time for initialization
     var thisObject = this; //hold this object for scope reasons
-    //Light Wallet Initialization
+    
+    //Light Wallet Initialization. Generates private keys and keeps locally.
     lightwallet.keystore.createVault({
       password:this.state.password,
       seedPhrase:"forget track antique track nurse offer armed garden bus lady lobster umbrella", // need to learn how to generate seed phrases
@@ -56,10 +57,11 @@ class App extends Component {
 
         ks.generateNewAddress(pwDerivedKey,1); // generates new addresses based on keys
         
-        thisObject.passwordProvider = function(pw,callback){ // not sure what this call back is for.
+        thisObject.passwordProvider = function(pw,callback){ // not sure what this callback is for.
           callback(null,pw);
         }
         var tempDate = new Date()
+
         //set state to load new components
         thisObject.setState({
                             pwDerivedKey:pwDerivedKey,
@@ -76,14 +78,12 @@ class App extends Component {
   }
 
   renderTxField(property){
-    // console.log(this.txObject[property])
       return(
         <Txfield property = {property} value = {this.txObject[property]} update = {this.updateTxValue.bind(this,property)} />
       )
   }
 
   renderTest(){
-
     if(this.state.initialRunTime != null){
       var startTime = new Date();
       if(true){
@@ -137,7 +137,6 @@ class App extends Component {
             {this.renderTest()}
         </div>
       </div>
-
     );
 
   }
